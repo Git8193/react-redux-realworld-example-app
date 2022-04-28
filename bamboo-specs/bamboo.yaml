@@ -1,0 +1,82 @@
+---
+version: 2
+plan:
+  project-key: REA
+  key: DEP
+  name: deploy
+stages:
+- Default Stage:
+    manual: false
+    final: false
+    jobs:
+    - Default Job
+Default Job:
+  key: JOB1
+  tasks:
+  - checkout:
+      repository: reactjs
+      force-clean-build: 'false'
+      description: Checkout Default Repository
+  - script:
+      interpreter: SHELL
+      scripts:
+      - |-
+        podman build -t rajaking786/reactjs:1.0.0 .
+        podman login docker.io -u rajaking786 -p docker8193
+        podman push rajaking786/reactjs:1.0.0
+      description: Docker - File check
+  artifact-subscriptions: []
+repositories:
+- reactjs:
+    type: github
+    base-url: https://github.com
+    repository: Git8193/react-redux-realworld-example-app
+    branch: master
+    user: Git8193
+    password: BAMSCRT@0@0@8sIvyOLfDLQKlDE6xo7S2xuE/uImX3HToVnxR5IBmz5tT50Aig2jNqtM+9m1LZMc
+    command-timeout-minutes: '180'
+    lfs: 'false'
+    verbose-logs: 'false'
+    use-shallow-clones: 'false'
+    cache-on-agents: 'true'
+    submodules: 'false'
+    ssh-key-applies-to-submodules: 'true'
+    fetch-all: 'false'
+    viewer:
+      com.atlassian.bamboo.plugins.atlassian-bamboo-plugin-git:githubViewer: {}
+triggers:
+- polling:
+    period: '180'
+branches:
+  create: manually
+  delete: never
+  link-to-jira: true
+notifications: []
+labels: []
+dependencies:
+  require-all-stages-passing: false
+  enabled-for-branches: true
+  block-strategy: none
+  plans: []
+other:
+  concurrent-build-plugin: system-default
+---
+version: 2
+plan:
+  key: REA-DEP
+plan-permissions:
+- roles:
+  - logged-in
+  - anonymous
+  permissions:
+  - view
+- users:
+  - kutralalingam
+  permissions:
+  - view
+  - edit
+  - build
+  - clone
+  - admin
+  - viewConfiguration
+...
