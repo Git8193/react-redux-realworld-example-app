@@ -3,7 +3,7 @@ COPY . /app
 WORKDIR /app
 RUN npm install
 RUN npm run build
-#MAINTAINER test
+MAINTAINER DevOps
 
 FROM nginx
 RUN rm -rf /usr/share/nginx/html
